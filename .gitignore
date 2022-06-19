@@ -1,0 +1,4 @@
+node_modules
+/web/cert
+.idea
+.env
