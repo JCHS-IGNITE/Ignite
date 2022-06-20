@@ -23,7 +23,7 @@ module.exports = {
               iconURL: discordUser.avatarURL(),
             })
             .addField('학번', `${user.grade}${user.class}${user.stdId.toString().padStart(2, '0')}`)
-            .addField('포인트', user.point.toString(), true)
+            .addField('포인트', user.point.toLocaleString(), true)
             .addField('랭크', await pointToRank(user), true)
             .setColor(0x66ccff)
             .setTimestamp(new Date()),
