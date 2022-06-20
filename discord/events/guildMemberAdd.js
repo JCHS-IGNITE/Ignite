@@ -7,6 +7,8 @@ module.exports = {
   once: false,
   async execute(client, member) {
     try {
+      if (member.user.bot) return;
+
       (await member.send('Check permission...')).delete();
 
       const result = await User.findOne({ discordId: member.id });
