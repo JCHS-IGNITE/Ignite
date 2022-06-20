@@ -98,6 +98,7 @@ module.exports = {
     .setName('보물')
     .setDescription('[관리자] 보물을 관리합니다.')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setDMPermission(false)
     .addSubcommand((command) => command.setName('목록').setDescription('모든 보물을 확인합니다.'))
     .addSubcommand((command) =>
       command

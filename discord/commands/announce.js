@@ -31,5 +31,6 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('공지')
     .setDescription('[관리자] 공지 사항에 글을 작성합니다.')
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setDMPermission(false),
 };

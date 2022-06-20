@@ -167,6 +167,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('인증')
     .setDescription('제천고등학교 학생인지 인증합니다.')
+    .setDMPermission(false)
     .addSubcommand((command) =>
       command
         .setName('자동')

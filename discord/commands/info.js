@@ -34,6 +34,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('정보')
     .setDescription('유저 정보를 조회합니다.')
+    .setDMPermission(false)
     .addUserOption((option) =>
       option.setName('유저').setDescription('특정 유저의 정보를 조회합니다.').setRequired(false),
     ),
