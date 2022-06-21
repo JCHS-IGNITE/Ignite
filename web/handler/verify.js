@@ -22,7 +22,6 @@ router.get('/', async (req, res) => {
         response_type: 'code',
         scope: 'identify',
         client_id: process.env.DISCORD_BOT_CLIENT_ID,
-        redirect_url: encodeURIComponent(`${process.env.WEB_DOMAIN}/oauth`),
       };
 
       res.cookie('lastUrl', req.originalUrl);
