@@ -36,10 +36,11 @@ module.exports = {
         await (
           await client.channels.fetch(process.env.DISCORD_VERIFY_CHANNEL)
         ).send({
+          content: `<@${member.id}>`,
           embeds: [
             new MessageEmbed()
               .setTitle('DM을 보낼 수 없음.')
-              .setDescription(`아래 과정을 수행 후 버튼을 눌러주세요.`)
+              .setDescription(`<@${member.id}>님, 아래 과정을 수행 후 버튼을 눌러주세요.`)
               .addField(
                 'PC',
                 '서버 우클릭 ➞ 개인정보 보호 설정 ➞ 서버 멤버가 보내는 다이렉트 메시지 허용하기',
