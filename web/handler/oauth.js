@@ -15,7 +15,6 @@ router.get('/', async (req, res) => {
       client_secret: process.env.DISCORD_BOT_CLIENT_SECRET,
       grant_type: 'authorization_code',
       code,
-      redirect_uri: 'http://221.160.76.14/oauth',
     });
 
     const result = (await axios.post('https://discord.com/api/v10/oauth2/token', params)).data;
