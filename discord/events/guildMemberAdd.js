@@ -14,22 +14,24 @@ module.exports = {
       const result = await User.findOne({ discordId: member.id });
 
       if (result) {
-        await member.roles.add(process.env.DISCORD_VERIFY_ROLE);
+        if (result.verify) {
+          await member.roles.add(process.env.DISCORD_VERIFY_ROLE);
 
-        await member.send({
-          embeds: [
-            new MessageEmbed()
-              .setTitle('역할 복구 완료')
-              .setDescription(
-                `${result.grade}학년 ${result.class}반 ${result.stdId}번 으로 인증되었습니다.`,
-              )
-              .addField('인증 방법', '기존 유저')
-              .setColor(0x7bff7b)
-              .setTimestamp(new Date()),
-          ],
-        });
+          await member.send({
+            embeds: [
+              new MessageEmbed()
+                .setTitle('역할 복구 완료')
+                .setDescription(
+                  `${result.grade}학년 ${result.class}반 ${result.stdId}번 으로 인증되었습니다.`,
+                )
+                .addField('인증 방법', '기존 유저')
+                .setColor(0x7bff7b)
+                .setTimestamp(new Date()),
+            ],
+          });
 
-        await logger.info('기존 유저(%s)에게 인증 권한을 지급했습니다.', member.user.tag);
+          await logger.info('기존 유저(%s)에게 인증 권한을 지급했습니다.', member.user.tag);
+        }
       }
     } catch (e) {
       if (e.message === 'Cannot send messages to this user') {

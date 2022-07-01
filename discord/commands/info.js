@@ -13,22 +13,27 @@ module.exports = {
     const user = await User.findOne({ discordId });
 
     if (user)
-      await interaction.editReply({
-        content: ' ',
-        embeds: [
-          new MessageEmbed()
-            .setTitle('정보')
-            .setAuthor({
-              name: discordUser.tag,
-              iconURL: discordUser.avatarURL(),
-            })
-            .addField('학번', `${user.grade}${user.class}${user.stdId.toString().padStart(2, '0')}`)
-            .addField('포인트', user.point.toLocaleString(), true)
-            .addField('랭크', await pointToRank(user), true)
-            .setColor(0x66ccff)
-            .setTimestamp(new Date()),
-        ],
-      });
+      if (user.verify) {
+        await interaction.editReply({
+          content: ' ',
+          embeds: [
+            new MessageEmbed()
+              .setTitle('정보')
+              .setAuthor({
+                name: discordUser.tag,
+                iconURL: discordUser.avatarURL(),
+              })
+              .addField(
+                '학번',
+                `${user.grade}${user.class}${user.stdId.toString().padStart(2, '0')}`,
+              )
+              .addField('포인트', user.point.toLocaleString(), true)
+              .addField('랭크', await pointToRank(user), true)
+              .setColor(0x66ccff)
+              .setTimestamp(new Date()),
+          ],
+        });
+      } else await interaction.editReply('인증된 유저가 아닙니다.');
     else await interaction.editReply('서버에 등록된 유저가 아닙니다.');
   },
   data: new SlashCommandBuilder()

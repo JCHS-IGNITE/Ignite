@@ -12,12 +12,7 @@ module.exports = async (client, interaction) => {
       const discordId = interaction.message.embeds[0].fields[4].value;
 
       if (interaction.customId === 'manual_verify_approve') {
-        await new User({
-          grade,
-          class: clazz,
-          stdId,
-          discordId,
-        }).save();
+        await User.updateOne({ discordId }, { verify: true });
 
         await (
           await interaction.guild.members.fetch(discordId)
@@ -60,8 +55,10 @@ module.exports = async (client, interaction) => {
 
         logger.info('관리자(%s)가 유저(%s)의 인증을 승인함.', interaction.user.tag, discordTag);
       } else if (interaction.customId === 'manual_verify_reject') {
+        await User.deleteOne({ discordId });
+
         await (
-          await interaction.guild.members.fetch(interaction.message.embeds[0].fields[4].value)
+          await interaction.guild.members.fetch(discordId)
         ).send({
           embeds: [
             new MessageEmbed()

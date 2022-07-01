@@ -19,9 +19,14 @@ module.exports = {
     await interaction.reply({ content: '> 명령을 수행중입니다.', ephemeral: true });
 
     if (existUser) {
-      await interaction.editReply(
-        `> 이미 해당 학번으로 인증된 계정이 존재합니다. <@${existUser.discordId}>`,
-      );
+      if (existUser.verify)
+        await interaction.editReply(
+          `> 이미 해당 학번으로 인증된 계정이 존재합니다. <@${existUser.discordId}>`,
+        );
+      else
+        await interaction.editReply(
+          `> 이미 해당 학번으로 인증을 기다리는 계정이 존재합니다. <@${existUser.discordId}>`,
+        );
     } else if (await User.findOne({ discordId: interaction.user.id })) {
       await interaction.editReply('> 이미 인증된 계정입니다.');
     } else {
@@ -70,6 +75,7 @@ module.exports = {
             class: clazz,
             stdId,
             discordId: interaction.user.id,
+            verify: true,
           }).save();
 
           await interaction.member.roles.add(process.env.DISCORD_VERIFY_ROLE);
@@ -114,6 +120,14 @@ module.exports = {
         if (!idCard.contentType.startsWith('image/')) {
           await interaction.editReply('> 학생증 사진을 업로드해주세요.');
         } else {
+          await new User({
+            grade,
+            class: clazz,
+            stdId,
+            discordId: interaction.user.id,
+            verify: false,
+          }).save();
+
           await interaction.editReply('> 관리자가 확인중입니다.');
 
           await interaction.user.send({

@@ -59,6 +59,8 @@ router.get('/', async (req, res) => {
 
       let user = await User.findOne({ discordId: data.user.id });
 
+      if (!user.verify) throw new Error('인증되지 않은 유저입니다.');
+
       if (user) {
         const treasureCode = decrypt(location);
 
