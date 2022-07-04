@@ -14,21 +14,23 @@ module.exports = {
     const clazz = interaction.options.getInteger('반');
     const stdId = interaction.options.getInteger('번호');
 
-    const existUser = await User.findOne({ grade, class: clazz, stdId });
+    const existUserByStdInfo = await User.findOne({ grade, class: clazz, stdId });
+    const existUserByDiscordId = await User.findOne({ discordId: interaction.user.id });
 
     await interaction.reply({ content: '> 명령을 수행중입니다.', ephemeral: true });
 
-    if (existUser) {
-      if (existUser.verify)
+    if (existUserByStdInfo) {
+      if (existUserByStdInfo.verify)
         await interaction.editReply(
-          `> 이미 해당 학번으로 인증된 계정이 존재합니다. <@${existUser.discordId}>`,
+          `> 이미 해당 학번으로 인증된 계정이 존재합니다. <@${existUserByStdInfo.discordId}>`,
         );
       else
         await interaction.editReply(
-          `> 이미 해당 학번으로 인증을 기다리는 계정이 존재합니다. <@${existUser.discordId}>`,
+          `> 이미 해당 학번으로 인증을 기다리는 계정이 존재합니다. <@${existUserByStdInfo.discordId}>`,
         );
-    } else if (await User.findOne({ discordId: interaction.user.id })) {
-      await interaction.editReply('> 이미 인증된 계정입니다.');
+    } else if (existUserByDiscordId) {
+      if (existUserByDiscordId.verify) await interaction.editReply('> 이미 인증된 계정입니다.');
+      else await interaction.editReply('> 이미 인증 대기중인 계정입니다.');
     } else {
       if (command === '자동') {
         const riroId = `22-${grade}${String(clazz).padStart(2, '0')}${String(stdId).padStart(
@@ -60,7 +62,9 @@ module.exports = {
               data.msg.split('(')[1],
             );
           } else if (data.msg.includes('통합 아이디(이메일)로 로그인하세요.')) {
-            await interaction.editReply('> 인증이 불가능한 계정입니다. 수동으로 인증해주세요.');
+            await interaction.editReply(
+              '> 통합 아이디로 자동 인증을 할 수 없습니다.\n> `/인증 수동` 명령어를 통해 수동으로 인증해주세요.',
+            );
             logger.warn('유저(%s)가 리로스쿨 인증에 실패함 (통합 아이디).', interaction.user.tag);
           } else {
             await interaction.editReply(`> 인증에 실패했습니다. ${data.msg}`);

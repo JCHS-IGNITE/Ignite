@@ -59,6 +59,7 @@ router.get('/', async (req, res) => {
 
       let user = await User.findOne({ discordId: data.user.id });
 
+      if (!user) throw new Error('존재하지 않는 유저입니다.');
       if (!user.verify) throw new Error('인증되지 않은 유저입니다.');
 
       if (user) {

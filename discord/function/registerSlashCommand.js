@@ -4,7 +4,7 @@ const fs = require('fs');
 const logger = require('../../provider/loggerProvider');
 
 module.exports = async () =>
-  new Promise((res) => {
+  new Promise((resolve, reject) => {
     const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_BOT_TOKEN);
 
     const commands = [];
@@ -32,7 +32,7 @@ module.exports = async () =>
         logger.info(`총 ${count}개의 슬래시 명령어 등록 성공.`);
         logger.info('');
 
-        res();
+        resolve();
       })
-      .catch(logger.error);
+      .catch(reject);
   });
