@@ -8,7 +8,8 @@ const log = require('./middleware/log');
 const forceHttps = require('./middleware/forceHttps');
 const pnf = require('./middleware/pnf');
 const oauthHandler = require('./handler/oauth');
-const verifyHandler = require('./handler/verify');
+const initHandler = require('./handler/treasure/init');
+const giveHandler = require('./handler/treasure/give');
 
 const app = express();
 
@@ -23,7 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/static`));
 
 app.use('/oauth', oauthHandler);
-app.use('/verify', verifyHandler);
+app.use('/treasure/init', initHandler);
+app.use('/treasure/give', giveHandler);
 
 app.use(pnf);
 

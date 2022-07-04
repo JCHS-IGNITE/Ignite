@@ -2,11 +2,12 @@ const express = require('express');
 const qs = require('qs');
 const axios = require('axios');
 const { MessageEmbed } = require('discord.js');
-const User = require('../../schema/User');
-const Treasure = require('../../schema/Treasure');
-const { decrypt } = require('../../util/aesEncrypto');
-const discordBot = require('../../discord/bot');
-const logger = require('../../provider/loggerProvider');
+const User = require('../../../schema/User');
+const Treasure = require('../../../schema/Treasure');
+const Session = require('../../../schema/Session');
+const { decrypt } = require('../../../util/aesEncrypto');
+const discordBot = require('../../../discord/bot');
+const logger = require('../../../provider/loggerProvider');
 
 const router = express.Router();
 
@@ -14,8 +15,14 @@ const client = discordBot();
 
 router.get('/', async (req, res) => {
   try {
-    const { location } = req.query;
-    let { accessToken, refreshToken } = req.cookies;
+    const { sessionKey } = req.query;
+    const { accessToken, refreshToken } = req.cookies;
+
+    if (!sessionKey) throw new Error('잘못된 접근입니다.');
+
+    const { discordId, location } = await Session.findOne({ sessionKey });
+
+    if (!discordId || !location) throw new Error('잘못된 접근입니다.');
 
     if (!accessToken || !refreshToken) {
       const params = {
@@ -28,6 +35,10 @@ router.get('/', async (req, res) => {
 
       res.status(301).redirect(`https://discord.com/api/oauth2/authorize?${qs.stringify(params)}`);
     } else {
+      const cookieOption = {
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+      };
+
       try {
         await axios('https://discord.com/api/oauth2/@me', {
           headers: { Authorization: `Bearer ${accessToken}` },
@@ -40,48 +51,44 @@ router.get('/', async (req, res) => {
           refresh_token: refreshToken,
         });
 
-        const { data } = await axios.post('https://discord.com/api/v10/oauth2/token', params);
+        const { refreshTokenResponse } = await axios.post(
+          'https://discord.com/api/v10/oauth2/token',
+          params,
+        );
 
-        const cookieOption = {
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-        };
-
-        accessToken = data.access_token;
-        refreshToken = data.refresh_token;
-
-        res.cookie('accessToken', accessToken, cookieOption);
-        res.cookie('refreshToken', refreshToken, cookieOption);
+        res.cookie('accessToken', refreshTokenResponse.access_token, cookieOption);
+        res.cookie('refreshToken', refreshTokenResponse.refresh_token, cookieOption);
       }
 
       const { data } = await axios('https://discord.com/api/oauth2/@me', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 
-      let user = await User.findOne({ discordId: data.user.id });
+      if (discordId !== data.user.id) throw new Error('유효한 세션이 아닙니다.');
+
+      let user = await User.findOne({ discordId });
 
       if (!user) throw new Error('존재하지 않는 유저입니다.');
       if (!user.verify) throw new Error('인증되지 않은 유저입니다.');
 
       if (user) {
-        const treasureCode = decrypt(location);
-
-        const treasure = await Treasure.findOne({ code: treasureCode });
+        const treasure = await Treasure.findOne({ code: location });
 
         if (!treasure) throw new Error('존재하지 않는 보물입니다.');
 
-        if (user.treasures.includes(treasureCode)) throw new Error('이미 발견한 보물입니다.');
+        if (user.treasures.includes(location)) throw new Error('이미 발견한 보물입니다.');
 
         await User.updateOne(
-          { discordId: data.user.id },
+          { discordId },
           { $inc: { point: treasure.price }, $push: { treasures: treasure.code } },
         );
 
-        user = await User.findOne({ discordId: data.user.id });
+        user = await User.findOne({ discordId });
 
         await (
           await (
             await (await client).guilds.fetch(process.env.DISCORD_GUILD_ID)
-          ).members.fetch(user.discordId)
+          ).members.fetch(discordId)
         ).send({
           embeds: [
             new MessageEmbed()
