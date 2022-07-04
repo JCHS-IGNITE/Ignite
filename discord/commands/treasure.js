@@ -46,7 +46,7 @@ module.exports = {
 
         const qr = (
           await qrcode.toDataURL(
-            `${process.env.WEB_DOMAIN}/verify?location=${encrypt(treasure.code)}`,
+            `${process.env.WEB_DOMAIN}/treasure/init?location=${encrypt(treasure.code)}`,
           )
         )
           .toString()
