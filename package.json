@@ -19,6 +19,7 @@
     "erlpack": "^0.1.4",
     "zlib-sync": "^0.1.7",
     "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.12",
     "mongoose": "^6.4.2",
     "winston": "^3.8.1",
     "express": "^4.18.1",

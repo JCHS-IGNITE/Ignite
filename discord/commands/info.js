@@ -23,6 +23,7 @@ module.exports = {
                 name: discordUser.tag,
                 iconURL: discordUser.avatarURL(),
               })
+              .addField('이름', user.name)
               .addField(
                 '학번',
                 `${user.grade}${user.class}${user.stdId.toString().padStart(2, '0')}`,
