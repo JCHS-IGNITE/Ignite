@@ -29,7 +29,7 @@ fs.readdirSync(`${__dirname}/events`)
   });
 
 process.on('unhandledRejection', (error) => {
-  logger.error(error);
+  logger.error(error.stack);
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);

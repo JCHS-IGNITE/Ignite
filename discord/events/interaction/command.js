@@ -7,7 +7,7 @@ module.exports = async (client, interaction) => {
     try {
       await command.execute(interaction);
     } catch (error) {
-      if (interaction.replied)
+      if (await interaction.fetchReply())
         await interaction.editReply('> 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
       else await interaction.reply('> 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
 

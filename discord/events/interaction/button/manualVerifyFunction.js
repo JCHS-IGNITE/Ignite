@@ -15,9 +15,10 @@ module.exports = async (client, interaction) => {
     if (interaction.customId === 'manual_verify_approve') {
       await User.updateOne({ discordId }, { verify: true });
 
-      await (
-        await interaction.guild.members.fetch(discordId)
-      ).roles.add(process.env.DISCORD_VERIFY_ROLE);
+      const member = await interaction.guild.members.fetch(discordId);
+
+      await member.roles.add(process.env.DISCORD_VERIFY_ROLE);
+      await member.setNickname(name);
 
       await interaction.message.delete();
 

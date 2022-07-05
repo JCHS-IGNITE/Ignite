@@ -16,6 +16,7 @@ module.exports = {
       if (result) {
         if (result.verify) {
           await member.roles.add(process.env.DISCORD_VERIFY_ROLE);
+          await member.setNickname(result.name);
 
           await member.send({
             embeds: [
