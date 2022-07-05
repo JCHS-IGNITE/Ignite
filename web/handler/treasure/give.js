@@ -5,7 +5,6 @@ const { MessageEmbed } = require('discord.js');
 const User = require('../../../schema/User');
 const Treasure = require('../../../schema/Treasure');
 const Session = require('../../../schema/Session');
-const { decrypt } = require('../../../util/aesEncrypto');
 const discordBot = require('../../../discord/bot');
 const logger = require('../../../provider/loggerProvider');
 
