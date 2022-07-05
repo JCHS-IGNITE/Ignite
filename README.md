@@ -1,4 +1,4 @@
-# IGNITE - <em>제천고등학교 2022 청명</em>
+# IGNITE - <em>제천고등학교 2022 청명제</em>
 
 # 공통
 |기술 스택||
@@ -18,11 +18,3 @@
 |라이브러리|![discord.js](https://img.shields.io/badge/discord.js-5865F2?style=for-the-badge&logo=discord&logoColor=white)|
 
 재학생 인증, 멤버 관리(포인트 관리), 공지 목적으로 사용됨.
-
-
-# 웹서버
-|기술 스택||
-|---|---|
-|라이브러리|![express.js](https://img.shields.io/badge/express.js-000000?style=for-the-badge&logo=express&logoColor=white)|
-
-보물 찾기 시 사용됨.
