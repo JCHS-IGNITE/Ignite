@@ -10,7 +10,7 @@ module.exports = {
     logger.info(`  - ${client.user.id}`);
     logger.info('');
 
-    await client.user.setActivity({ name: 'IGNITE', type: 'COMPETING' });
+    await client.user.setActivity({ name: '제천고등학교', type: 'COMPETING' });
 
     const verifyChannel = await client.channels.fetch(process.env.DISCORD_VERIFY_CHANNEL);
 

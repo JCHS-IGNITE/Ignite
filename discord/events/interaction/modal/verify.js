@@ -23,7 +23,7 @@ module.exports = async (client, interaction) => {
       headers: { ...params.getHeaders() },
     });
 
-    if (loginResult.data.result === 'fail' || !loginResult.data.result) {
+    if (loginResult.data.result === 'fail' || loginResult.data.result === false) {
       if (loginResult.data.msg.includes('아이디가 없거나 비밀번호가 맞지 않습니다')) {
         await interaction.reply({
           embeds: [
@@ -76,14 +76,7 @@ module.exports = async (client, interaction) => {
       });
       logger.warn('유저(%s)가 리로스쿨 인증에 실패함 (최대 한도 초과).', interaction.user.tag);
     } else {
-      if (
-        loginResult.headers['set-cookie']
-          .map((str) => ({
-            key: str.split('=')[0],
-            value: str.split('=')[1].split(';')[0],
-          }))
-          .filter((o) => o.key === 'login_chk' || o.key === 'cookie_token').length === 2
-      ) {
+      try {
         const infoResult = await axios.get('https://jecheonh.riroschool.kr/my_page.php', {
           headers: {
             Cookie: loginResult.headers['set-cookie'],
@@ -160,22 +153,18 @@ module.exports = async (client, interaction) => {
 
           logger.info('리로스쿨 인증을 통해 유저(%s)가 인증됨.', interaction.user.tag);
         }
-      } else {
+      } catch (e) {
+        console.error(e);
         await interaction.reply({
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
-              .setDescription(
-                '리로스쿨에서 토큰을 발급받을 수 없습니다.\n잠시 후 다시 시도해주세요.',
-              )
+              .setDescription('리로스쿨 토큰 발급에 실패했습니다.\n잠시 후 다시 시도해주세요.')
               .setColor(0xff5252)
               .setTimestamp(new Date()),
           ],
         });
-        logger.warn(
-          '유저(%s)가 리로스쿨 인증에 실패함 (리로스쿨 토큰 발급 실패).',
-          interaction.user.tag,
-        );
+        logger.warn('유저(%s)가 리로스쿨 인증에 실패함 (토큰 발급).', interaction.user.tag);
       }
     }
   }
