@@ -5,5 +5,6 @@ module.exports = {
     'import/no-dynamic-require': 'off',
     'global-require': 'off',
     'no-lonely-if': 'off',
+    'no-await-in-loop': 'off'
   },
 };
