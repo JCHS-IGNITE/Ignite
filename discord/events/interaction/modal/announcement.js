@@ -6,9 +6,9 @@ module.exports = async (client, interaction) => {
     const title = interaction.fields.getTextInputValue('title');
     const content = interaction.fields.getTextInputValue('content');
 
-    const channel = await interaction.guild.channels.fetch(
-      process.env.DISCORD_ANNOUNCEMENT_CHANNEL,
-    );
+    const channelId = interaction.customId.split('|')[1].split('$')[0];
+
+    const channel = await interaction.guild.channels.fetch(channelId);
 
     await channel.send({
       embeds: [new MessageEmbed().setTitle(title).setDescription(content).setColor(0x66ccff)],
