@@ -13,6 +13,13 @@ fs.readdirSync(`${__dirname}/commands`)
     client.commands.set(command.data.name, command);
   });
 
+fs.readdirSync(`${__dirname}/context`)
+  .filter((file) => file.endsWith('js'))
+  .forEach((file) => {
+    const command = require(`${__dirname}/context/${file}`);
+    client.commands.set(command.data.name, command);
+  });
+
 fs.readdirSync(`${__dirname}/events`)
   .filter((file) => file.endsWith('js'))
   .forEach((file) => {

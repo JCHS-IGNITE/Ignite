@@ -1,11 +1,12 @@
 const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { ContextMenuCommandBuilder } = require('@discordjs/builders');
+const { ApplicationCommandType } = require('discord-api-types/v10');
 const User = require('../../schema/User');
 const { pointToRank } = require('../../util/rank');
 
 module.exports = {
   async execute(interaction) {
-    const discordUser = interaction.options.getUser('유저') || interaction.user;
+    const discordUser = interaction.targetUser;
     const discordId = discordUser.id;
 
     await interaction.reply('> 명령을 수행중입니다.');
@@ -37,11 +38,8 @@ module.exports = {
       } else await interaction.editReply('인증된 유저가 아닙니다.');
     else await interaction.editReply('서버에 등록된 유저가 아닙니다.');
   },
-  data: new SlashCommandBuilder()
+  data: new ContextMenuCommandBuilder()
     .setName('정보')
-    .setDescription('유저 정보를 조회합니다.')
-    .setDMPermission(false)
-    .addUserOption((option) =>
-      option.setName('유저').setDescription('특정 유저의 정보를 조회합니다.').setRequired(false),
-    ),
+    .setType(ApplicationCommandType.User)
+    .setDMPermission(false),
 };

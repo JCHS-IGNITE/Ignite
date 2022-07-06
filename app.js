@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const discordBot = require('./discord/bot');
 const mongodb = require('./database/mongoDb');
-const registerSlashCommand = require('./discord/function/registerSlashCommand');
+const registerDiscordApi = require('./discord/function/registerDiscordApi');
 const printLogo = require('./util/printLogo');
 const logger = require('./provider/loggerProvider');
 
@@ -10,10 +10,10 @@ const logger = require('./provider/loggerProvider');
   try {
     printLogo();
     await mongodb();
-    await registerSlashCommand();
+    await registerDiscordApi();
     await discordBot();
   } catch (e) {
-    logger.error(e.message);
+    logger.error(e.stack);
     process.exit();
   }
 })();
