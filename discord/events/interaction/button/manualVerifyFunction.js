@@ -24,6 +24,16 @@ module.exports = async (client, interaction) => {
         // eslint-disable-next-line no-empty
       } catch (e) {}
 
+      await interaction.reply({
+        embeds: [
+          new MessageEmbed()
+            .setTitle('재학생 인증 허가')
+            .setDescription(`${grade}학년 ${clazz}반 ${stdId}번호 ${name}`)
+            .addField('담당자', interaction.user.tag, true)
+            .setColor(0x7bff7b)
+            .setTimestamp(new Date()),
+        ],
+      });
       await interaction.message.delete();
 
       await (
