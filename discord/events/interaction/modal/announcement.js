@@ -27,6 +27,14 @@ module.exports = async (client, interaction) => {
       await channel.send({ files });
     }
 
-    await interaction.reply('> 공지를 전송했습니다.');
+    await interaction.reply({
+      embeds: [
+        new MessageEmbed()
+          .setTitle('공지 전송')
+          .setDescription(`공지를 전송했습니다.`)
+          .setColor(0x7bff7b)
+          .setTimestamp(new Date()),
+      ],
+    });
   }
 };

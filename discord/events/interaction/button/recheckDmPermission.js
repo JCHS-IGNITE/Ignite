@@ -15,11 +15,14 @@ module.exports = async (client, interaction) => {
 
       if (result) {
         await member.roles.add(process.env.DISCORD_VERIFY_ROLE);
-        await member.setNickname(
-          `${result.grade}${result.class}${result.stdId.toString().padStart(2, '0')} ${
-            result.name
-          }`,
-        );
+        try {
+          await member.setNickname(
+            `${result.grade}${result.class}${result.stdId.toString().padStart(2, '0')} ${
+              result.name
+            }`,
+          );
+          // eslint-disable-next-line no-empty
+        } catch (e) {}
 
         await member.send({
           embeds: [
@@ -38,8 +41,14 @@ module.exports = async (client, interaction) => {
       }
     } catch (e) {
       await interaction.reply({
-        content: '위 과정을 수행 후 버튼을 눌러주세요.',
         ephemeral: true,
+        embeds: [
+          new MessageEmbed()
+            .setTitle('오류 발생')
+            .setDescription(e.message)
+            .setColor(0xff5252)
+            .setTimestamp(new Date()),
+        ],
       });
     }
   }

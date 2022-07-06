@@ -18,7 +18,11 @@ module.exports = async (client, interaction) => {
       const member = await interaction.guild.members.fetch(discordId);
 
       await member.roles.add(process.env.DISCORD_VERIFY_ROLE);
-      await member.setNickname(`${grade}${clazz}${stdId.toString().padStart(2, '0')} ${name}`);
+
+      try {
+        await member.setNickname(`${grade}${clazz}${stdId.toString().padStart(2, '0')} ${name}`);
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
 
       await interaction.message.delete();
 
@@ -42,14 +46,6 @@ module.exports = async (client, interaction) => {
         clazz,
         stdId,
         name,
-      );
-
-      await sendMessage.discord.successVerifyInWelcomeChannel(
-        interaction,
-        name,
-        grade,
-        clazz,
-        stdId,
       );
 
       logger.info('관리자(%s)가 유저(%s)의 인증을 승인함.', interaction.user.tag, discordTag);

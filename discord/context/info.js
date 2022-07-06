@@ -9,14 +9,22 @@ module.exports = {
     const discordUser = interaction.targetUser;
     const discordId = discordUser.id;
 
-    await interaction.reply('> 명령을 수행중입니다.');
+    await interaction.reply({
+      ephemeral: true,
+      embeds: [
+        new MessageEmbed()
+          .setTitle('명령 수행중')
+          .setDescription(`명령을 수행중입니다. 잠시만 기다려주세요.`)
+          .setColor(0x66ccff)
+          .setTimestamp(new Date()),
+      ],
+    });
 
     const user = await User.findOne({ discordId });
 
     if (user)
       if (user.verify) {
         await interaction.editReply({
-          content: ' ',
           embeds: [
             new MessageEmbed()
               .setTitle('정보')
@@ -35,11 +43,10 @@ module.exports = {
               .setTimestamp(new Date()),
           ],
         });
-      } else await interaction.editReply('인증된 유저가 아닙니다.');
-    else await interaction.editReply('서버에 등록된 유저가 아닙니다.');
+      }
   },
   data: new ContextMenuCommandBuilder()
-    .setName('정보')
+    .setName('정보 보기')
     .setType(ApplicationCommandType.User)
     .setDMPermission(false),
 };

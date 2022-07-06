@@ -17,8 +17,28 @@ module.exports = {
     const existUserByDiscordId = await User.findOne({ discordId: interaction.user.id });
 
     if (existUserByDiscordId) {
-      if (existUserByDiscordId.verify) await interaction.reply('> 이미 인증된 계정입니다.');
-      else await interaction.reply('> 이미 인증 대기중인 계정입니다.');
+      if (existUserByDiscordId.verify)
+        await interaction.reply({
+          ephemeral: true,
+          embeds: [
+            new MessageEmbed()
+              .setTitle('오류 발생')
+              .setDescription(`이미 인증된 계정입니다.`)
+              .setColor(0xff5252)
+              .setTimestamp(new Date()),
+          ],
+        });
+      else
+        await interaction.reply({
+          ephemeral: true,
+          embeds: [
+            new MessageEmbed()
+              .setTitle('오류 발생')
+              .setDescription(`이미 인증 대기중인 계정입니다.`)
+              .setColor(0xff5252)
+              .setTimestamp(new Date()),
+          ],
+        });
     } else {
       if (command === '일반계정' || command === '통합계정') {
         let idComponent;
@@ -64,7 +84,16 @@ module.exports = {
 
         await interaction.showModal(modal);
       } else if (command === '수동') {
-        await interaction.reply({ content: '> 명령을 수행중입니다.', ephemeral: true });
+        await interaction.reply({
+          ephemeral: true,
+          embeds: [
+            new MessageEmbed()
+              .setTitle('명령 수행중')
+              .setDescription(`명령을 수행중입니다. 잠시만 기다려주세요.`)
+              .setColor(0x66ccff)
+              .setTimestamp(new Date()),
+          ],
+        });
 
         const name = interaction.options.getString('이름');
         const grade = interaction.options.getInteger('학년');
@@ -73,7 +102,15 @@ module.exports = {
         const idCard = interaction.options.getAttachment('학생증');
 
         if (!idCard.contentType.startsWith('image/')) {
-          await interaction.editReply('> 학생증 사진을 업로드해주세요.');
+          await interaction.editReply({
+            embeds: [
+              new MessageEmbed()
+                .setTitle('오류 발생')
+                .setDescription(`학생증 사진을 업로드해주세요.`)
+                .setColor(0xff5252)
+                .setTimestamp(new Date()),
+            ],
+          });
         } else {
           await new User({
             name,
@@ -84,14 +121,12 @@ module.exports = {
             verify: false,
           }).save();
 
-          await interaction.editReply('> 관리자가 확인중입니다.');
-
-          await interaction.user.send({
+          await interaction.editReply({
             embeds: [
               new MessageEmbed()
-                .setTitle('인증 대기 중')
+                .setTitle('인증 대기중')
                 .setDescription(`관리자가 확인 후 인증 여부가 결정됩니다.\n잠시만 기다려주세요.`)
-                .setColor(0xffff99)
+                .setColor(0xffcc99)
                 .setTimestamp(new Date()),
             ],
           });

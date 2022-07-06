@@ -16,11 +16,14 @@ module.exports = {
       if (result) {
         if (result.verify) {
           await member.roles.add(process.env.DISCORD_VERIFY_ROLE);
-          await member.setNickname(
-            `${result.grade}${result.class}${result.stdId.toString().padStart(2, '0')} ${
-              result.name
-            }`,
-          );
+          try {
+            await member.setNickname(
+              `${result.grade}${result.class}${result.stdId.toString().padStart(2, '0')} ${
+                result.name
+              }`,
+            );
+            // eslint-disable-next-line no-empty
+          } catch (e) {}
 
           await member.send({
             embeds: [
