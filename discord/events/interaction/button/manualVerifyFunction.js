@@ -18,7 +18,7 @@ module.exports = async (client, interaction) => {
       const member = await interaction.guild.members.fetch(discordId);
 
       await member.roles.add(process.env.DISCORD_VERIFY_ROLE);
-      await member.setNickname(name);
+      await member.setNickname(`${grade}${clazz}${stdId.toString().padStart(2, '0')} ${name}`);
 
       await interaction.message.delete();
 

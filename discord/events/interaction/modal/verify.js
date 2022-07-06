@@ -92,7 +92,9 @@ module.exports = async (client, interaction) => {
           }).save();
 
           await interaction.member.roles.add(process.env.DISCORD_VERIFY_ROLE);
-          await interaction.member.setNickname(name);
+          await interaction.member.setNickname(
+            `${grade}${clazz}${stdId.toString().padStart(2, '0')} ${name}`,
+          );
 
           await interaction.editReply('> 인증에 성공했습니다.');
 
