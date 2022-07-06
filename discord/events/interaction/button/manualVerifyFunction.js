@@ -77,7 +77,7 @@ module.exports = async (client, interaction) => {
       });
 
       await (
-        await interaction.guild.members.fetch(interaction.message.embeds[0].fields[4].value)
+        await interaction.guild.members.fetch(interaction.message.embeds[0].fields[5].value)
       ).kick(`관리자(${interaction.user.tag})가 인증을 거절함.`);
 
       await interaction.message.delete();

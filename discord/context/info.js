@@ -10,7 +10,6 @@ module.exports = {
     const discordId = discordUser.id;
 
     await interaction.reply({
-      ephemeral: true,
       embeds: [
         new MessageEmbed()
           .setTitle('명령 수행중')
@@ -22,7 +21,7 @@ module.exports = {
 
     const user = await User.findOne({ discordId });
 
-    if (user)
+    if (user) {
       if (user.verify) {
         await interaction.editReply({
           embeds: [
@@ -43,7 +42,26 @@ module.exports = {
               .setTimestamp(new Date()),
           ],
         });
-      }
+      } else
+        await interaction.editReply({
+          embeds: [
+            new MessageEmbed()
+              .setTitle('오류 발생')
+              .setDescription(`아직 인증 대기중인 유저입니다.`)
+              .setColor(0xff5252)
+              .setTimestamp(new Date()),
+          ],
+        });
+    } else
+      await interaction.editReply({
+        embeds: [
+          new MessageEmbed()
+            .setTitle('오류 발생')
+            .setDescription(`서버에 등록된 유저가 아닙니다.`)
+            .setColor(0xff5252)
+            .setTimestamp(new Date()),
+        ],
+      });
   },
   data: new ContextMenuCommandBuilder()
     .setName('정보 보기')

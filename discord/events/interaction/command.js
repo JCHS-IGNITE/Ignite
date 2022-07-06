@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const logger = require('../../../provider/loggerProvider');
 
 module.exports = async (client, interaction) => {
   if (interaction.isCommand()) {
@@ -9,7 +10,11 @@ module.exports = async (client, interaction) => {
     try {
       await command.execute(interaction);
     } catch (error) {
-      if (await interaction.fetchReply())
+      logger.error(error.stack);
+
+      try {
+        await interaction.fetchReply();
+
         await interaction.editReply({
           embeds: [
             new MessageEmbed()
@@ -19,7 +24,7 @@ module.exports = async (client, interaction) => {
               .setTimestamp(new Date()),
           ],
         });
-      else
+      } catch (e) {
         await interaction.reply({
           embeds: [
             new MessageEmbed()
@@ -29,6 +34,30 @@ module.exports = async (client, interaction) => {
               .setTimestamp(new Date()),
           ],
         });
+      }
+      try {
+        await interaction.fetchReply();
+
+        await interaction.editReply({
+          embeds: [
+            new MessageEmbed()
+              .setTitle('오류 발생')
+              .setDescription(error.message)
+              .setColor(0xff5252)
+              .setTimestamp(new Date()),
+          ],
+        });
+      } catch (e) {
+        await interaction.reply({
+          embeds: [
+            new MessageEmbed()
+              .setTitle('오류 발생')
+              .setDescription(error.message)
+              .setColor(0xff5252)
+              .setTimestamp(new Date()),
+          ],
+        });
+      }
 
       throw error;
     }

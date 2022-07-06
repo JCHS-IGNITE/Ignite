@@ -19,7 +19,6 @@ module.exports = {
     if (existUserByDiscordId) {
       if (existUserByDiscordId.verify)
         await interaction.reply({
-          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
@@ -30,7 +29,6 @@ module.exports = {
         });
       else
         await interaction.reply({
-          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
@@ -85,7 +83,6 @@ module.exports = {
         await interaction.showModal(modal);
       } else if (command === '수동') {
         await interaction.reply({
-          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('명령 수행중')
@@ -100,6 +97,34 @@ module.exports = {
         const clazz = interaction.options.getInteger('반');
         const stdId = interaction.options.getInteger('번호');
         const idCard = interaction.options.getAttachment('학생증');
+
+        const existUser = await User.findOne({ grade, class: clazz, stdId });
+
+        if (existUser)
+          if (existUser.verify)
+            await interaction.editReply({
+              embeds: [
+                new MessageEmbed()
+                  .setTitle('오류 발생')
+                  .setDescription(
+                    `해당 학번으로 인증된 계정이 이미 존재합니다.\n<@${existUser.discordId}>`,
+                  )
+                  .setColor(0xff5252)
+                  .setTimestamp(new Date()),
+              ],
+            });
+          else
+            await interaction.editReply({
+              embeds: [
+                new MessageEmbed()
+                  .setTitle('오류 발생')
+                  .setDescription(
+                    `해당 학번으로 인증을 기다리는 계정이 이미 존재합니다.\n<@${existUser.discordId}>`,
+                  )
+                  .setColor(0xff5252)
+                  .setTimestamp(new Date()),
+              ],
+            });
 
         if (!idCard.contentType.startsWith('image/')) {
           await interaction.editReply({
