@@ -33,8 +33,7 @@ module.exports = {
                   `${result.grade}학년 ${result.class}반 ${result.stdId}번 으로 인증되었습니다.`,
                 )
                 .addField('인증 방법', '기존 유저')
-                .setColor(0x7bff7b)
-                .setTimestamp(new Date()),
+                .setColor(0x7bff7b),
             ],
           });
 
@@ -56,8 +55,7 @@ module.exports = {
                 '서버 우클릭 ➞ 개인정보 보호 설정 ➞ 서버 멤버가 보내는 다이렉트 메시지 허용하기',
               )
               .addField('모바일', '… ➞ 다이렉트 메시지 허용')
-              .setColor(0xff3300)
-              .setTimestamp(new Date()),
+              .setColor(0xff3300),
           ],
           components: [
             new MessageActionRow().addComponents(

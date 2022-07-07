@@ -32,8 +32,7 @@ module.exports = async (client, interaction) => {
                 `${result.grade}학년 ${result.class}반 ${result.stdId}번 으로 인증되었습니다.`,
               )
               .addField('인증 방법', '기존 유저')
-              .setColor(0x7bff7b)
-              .setTimestamp(new Date()),
+              .setColor(0x7bff7b),
           ],
         });
 
@@ -41,12 +40,9 @@ module.exports = async (client, interaction) => {
       }
     } catch (e) {
       await interaction.reply({
+        ephemeral: true,
         embeds: [
-          new MessageEmbed()
-            .setTitle('오류 발생')
-            .setDescription(e.message)
-            .setColor(0xff5252)
-            .setTimestamp(new Date()),
+          new MessageEmbed().setTitle('오류 발생').setDescription(e.message).setColor(0xff5252),
         ],
       });
     }

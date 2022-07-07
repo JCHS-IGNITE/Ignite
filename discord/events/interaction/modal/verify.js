@@ -30,32 +30,31 @@ module.exports = async (client, interaction) => {
             new MessageEmbed()
               .setTitle('오류 발생')
               .setDescription('잘못된 비밀번호입니다.')
-              .setColor(0xff5252)
-              .setTimestamp(new Date()),
+              .setColor(0xff5252),
           ],
         });
         logger.warn('유저(%s)가 리로스쿨 인증에 실패함 (계정 정보 틀림).', interaction.user.tag);
       } else if (loginResult.data.msg === '통합 아이디(이메일)로 로그인하세요.') {
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
               .setDescription(
                 '리로스쿨 통합 계정입니다.\n`/인증 자동 통합계정` 명령어를 사용해주세요.',
               )
-              .setColor(0xff5252)
-              .setTimestamp(new Date()),
+              .setColor(0xff5252),
           ],
         });
         logger.warn('유저(%s)가 리로스쿨 인증에 실패함 (통합 아이디).', interaction.user.tag);
       } else {
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
               .setDescription(`인증에 실패했습니다.\n${loginResult.data.msg}`)
-              .setColor(0xff5252)
-              .setTimestamp(new Date()),
+              .setColor(0xff5252),
           ],
         });
         logger.warn(
@@ -66,12 +65,12 @@ module.exports = async (client, interaction) => {
       }
     } else if (loginResult.data.msg.includes('로그인을 연속 5회 실패했습니다.')) {
       await interaction.reply({
+        ephemeral: true,
         embeds: [
           new MessageEmbed()
             .setTitle('오류 발생')
             .setDescription('5회 연속으로 인증에 실패했습니다.\n5분 후 다시 시도해주세요.')
-            .setColor(0xff5252)
-            .setTimestamp(new Date()),
+            .setColor(0xff5252),
         ],
       });
       logger.warn('유저(%s)가 리로스쿨 인증에 실패함 (최대 한도 초과).', interaction.user.tag);
@@ -99,26 +98,26 @@ module.exports = async (client, interaction) => {
         if (existUserByStdInfo) {
           if (existUserByStdInfo.verify)
             await interaction.reply({
+              ephemeral: true,
               embeds: [
                 new MessageEmbed()
                   .setTitle('오류 발생')
                   .setDescription(
                     `해당 학번으로 인증된 계정이 이미 존재합니다.\n<@${existUserByStdInfo.discordId}>`,
                   )
-                  .setColor(0xff5252)
-                  .setTimestamp(new Date()),
+                  .setColor(0xff5252),
               ],
             });
           else
             await interaction.reply({
+              ephemeral: true,
               embeds: [
                 new MessageEmbed()
                   .setTitle('오류 발생')
                   .setDescription(
                     `해당 학번으로 인증을 기다리는 계정이 이미 존재합니다.\n<@${existUserByStdInfo.discordId}>`,
                   )
-                  .setColor(0xff5252)
-                  .setTimestamp(new Date()),
+                  .setColor(0xff5252),
               ],
             });
         } else {
@@ -144,8 +143,7 @@ module.exports = async (client, interaction) => {
               new MessageEmbed()
                 .setTitle('재학생 인증 성공')
                 .setDescription('인증에 성공했습니다.')
-                .setColor(0x7bff7b)
-                .setTimestamp(new Date()),
+                .setColor(0x7bff7b),
             ],
           });
 
@@ -156,12 +154,12 @@ module.exports = async (client, interaction) => {
       } catch (e) {
         console.error(e);
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
               .setDescription('리로스쿨 토큰 발급에 실패했습니다.\n잠시 후 다시 시도해주세요.')
-              .setColor(0xff5252)
-              .setTimestamp(new Date()),
+              .setColor(0xff5252),
           ],
         });
         logger.warn('유저(%s)가 리로스쿨 인증에 실패함 (토큰 발급).', interaction.user.tag);

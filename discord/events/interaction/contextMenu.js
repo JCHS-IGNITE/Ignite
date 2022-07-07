@@ -16,22 +16,22 @@ module.exports = async (client, interaction) => {
         await interaction.fetchReply();
 
         await interaction.editReply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
               .setDescription(error.message)
-              .setColor(0xff5252)
-              .setTimestamp(new Date()),
+              .setColor(0xff5252),
           ],
         });
       } catch (e) {
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
               .setDescription(error.message)
-              .setColor(0xff5252)
-              .setTimestamp(new Date()),
+              .setColor(0xff5252),
           ],
         });
       }

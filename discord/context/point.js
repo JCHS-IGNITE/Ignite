@@ -28,23 +28,23 @@ module.exports = {
 
         await interaction.showModal(modal);
       } else
-        await interaction.editReply({
+        await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
               .setDescription(`아직 인증 대기중인 유저입니다.`)
-              .setColor(0xff5252)
-              .setTimestamp(new Date()),
+              .setColor(0xff5252),
           ],
         });
     } else
-      await interaction.editReply({
+      await interaction.reply({
+        ephemeral: true,
         embeds: [
           new MessageEmbed()
             .setTitle('오류 발생')
             .setDescription(`서버에 등록된 유저가 아닙니다.`)
-            .setColor(0xff5252)
-            .setTimestamp(new Date()),
+            .setColor(0xff5252),
         ],
       });
   },

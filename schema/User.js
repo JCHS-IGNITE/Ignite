@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     class: { type: Number, required: true },
     stdId: { type: Number, required: true },
     discordId: { type: String, required: true, unique: true },
+    riotNickname: { type: String, required: false, unique: true },
     verify: { type: Boolean, default: false },
     point: { type: Number, default: 0 },
   },

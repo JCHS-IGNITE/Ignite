@@ -13,7 +13,7 @@ module.exports = async (client, interaction) => {
       await User.updateOne({ discordId }, { $inc: { point } });
       const user = await User.findOne({ discordId });
 
-      interaction.reply({
+      await interaction.reply({
         embeds: [
           new MessageEmbed()
             .setTitle('포인트 지급')
@@ -21,20 +21,19 @@ module.exports = async (client, interaction) => {
             .addField('대상 유저', `<@${discordId}>`, true)
             .addField('증감량', point.toString(), true)
             .addField('보유 포인트', user.point.toString(), true)
-            .setColor(0x7bff7b)
-            .setTimestamp(new Date()),
+            .setColor(0x7bff7b),
         ],
       });
     } catch (e) {
       console.error(e);
 
       await interaction.reply({
+        ephemeral: true,
         embeds: [
           new MessageEmbed()
             .setTitle('오류 발생')
             .setDescription('포인트는 정수로 입력해주세요.')
-            .setColor(0xff5252)
-            .setTimestamp(new Date()),
+            .setColor(0xff5252),
         ],
       });
     }

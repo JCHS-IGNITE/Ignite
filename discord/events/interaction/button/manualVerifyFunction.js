@@ -30,8 +30,7 @@ module.exports = async (client, interaction) => {
             .setTitle('재학생 인증 허가')
             .setDescription(`${grade}학년 ${clazz}반 ${stdId}번 ${name}`)
             .addField('담당자', interaction.user.tag, true)
-            .setColor(0x7bff7b)
-            .setTimestamp(new Date()),
+            .setColor(0x7bff7b),
         ],
       });
       await interaction.message.delete();
@@ -45,8 +44,7 @@ module.exports = async (client, interaction) => {
             .setDescription(`${grade}학년 ${clazz}반 ${stdId}번 ${name} 으로 인증되었습니다.`)
             .addField('인증 방법', '수동 인증', true)
             .addField('담당자', interaction.user.tag, true)
-            .setColor(0x7bff7b)
-            .setTimestamp(new Date()),
+            .setColor(0x7bff7b),
         ],
       });
 
@@ -71,8 +69,7 @@ module.exports = async (client, interaction) => {
             .setDescription(`인증이 거부되었습니다.`)
             .addField('인증 방법', '수동 인증', true)
             .addField('담당자', interaction.user.tag, true)
-            .setColor(0xff3300)
-            .setTimestamp(new Date()),
+            .setColor(0xff3300),
         ],
       });
 

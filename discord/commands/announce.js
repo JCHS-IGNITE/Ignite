@@ -70,7 +70,6 @@ module.exports = {
     .addAttachmentOption((option) =>
       option.setName('파일5').setDescription('업로드할 파일이 있을 경우 선택해주세요.'),
     )
-    .setDMPermission(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setDMPermission(false),
 };

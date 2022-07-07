@@ -19,22 +19,22 @@ module.exports = {
     if (existUserByDiscordId) {
       if (existUserByDiscordId.verify)
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
               .setDescription(`이미 인증된 계정입니다.`)
-              .setColor(0xff5252)
-              .setTimestamp(new Date()),
+              .setColor(0xff5252),
           ],
         });
       else
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
               .setDescription(`이미 인증 대기중인 계정입니다.`)
-              .setColor(0xff5252)
-              .setTimestamp(new Date()),
+              .setColor(0xff5252),
           ],
         });
     } else {
@@ -82,16 +82,6 @@ module.exports = {
 
         await interaction.showModal(modal);
       } else if (command === '수동') {
-        await interaction.reply({
-          embeds: [
-            new MessageEmbed()
-              .setTitle('명령 수행중')
-              .setDescription(`명령을 수행중입니다. 잠시만 기다려주세요.`)
-              .setColor(0x66ccff)
-              .setTimestamp(new Date()),
-          ],
-        });
-
         const name = interaction.options.getString('이름');
         const grade = interaction.options.getInteger('학년');
         const clazz = interaction.options.getInteger('반');
@@ -102,38 +92,38 @@ module.exports = {
 
         if (existUser)
           if (existUser.verify)
-            await interaction.editReply({
+            await interaction.reply({
+              ephemeral: true,
               embeds: [
                 new MessageEmbed()
                   .setTitle('오류 발생')
                   .setDescription(
                     `해당 학번으로 인증된 계정이 이미 존재합니다.\n<@${existUser.discordId}>`,
                   )
-                  .setColor(0xff5252)
-                  .setTimestamp(new Date()),
+                  .setColor(0xff5252),
               ],
             });
           else
-            await interaction.editReply({
+            await interaction.reply({
+              ephemeral: true,
               embeds: [
                 new MessageEmbed()
                   .setTitle('오류 발생')
                   .setDescription(
                     `해당 학번으로 인증을 기다리는 계정이 이미 존재합니다.\n<@${existUser.discordId}>`,
                   )
-                  .setColor(0xff5252)
-                  .setTimestamp(new Date()),
+                  .setColor(0xff5252),
               ],
             });
 
         if (!idCard.contentType.startsWith('image/')) {
-          await interaction.editReply({
+          await interaction.reply({
+            ephemeral: true,
             embeds: [
               new MessageEmbed()
                 .setTitle('오류 발생')
                 .setDescription(`학생증 사진을 업로드해주세요.`)
-                .setColor(0xff5252)
-                .setTimestamp(new Date()),
+                .setColor(0xff5252),
             ],
           });
         } else {
@@ -146,13 +136,13 @@ module.exports = {
             verify: false,
           }).save();
 
-          await interaction.editReply({
+          await interaction.reply({
+            ephemeral: true,
             embeds: [
               new MessageEmbed()
                 .setTitle('인증 대기중')
                 .setDescription(`관리자가 확인 후 인증 여부가 결정됩니다.\n잠시만 기다려주세요.`)
-                .setColor(0xffcc99)
-                .setTimestamp(new Date()),
+                .setColor(0xffcc99),
             ],
           });
 
@@ -170,8 +160,7 @@ module.exports = {
                 .addField('번호', stdId.toString(), true)
                 .addField('디스코드 이름', interaction.user.tag, true)
                 .addField('디스코드 아이디', interaction.user.id, true)
-                .setImage(idCard.attachment.toString())
-                .setTimestamp(new Date()),
+                .setImage(idCard.attachment.toString()),
             ],
             components: [
               new MessageActionRow()
