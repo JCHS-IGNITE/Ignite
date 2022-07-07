@@ -20,6 +20,13 @@ module.exports = async (client, interaction) => {
       ),
     );
 
+    if (members.filter((o) => o === null).length > 0)
+      await interaction.reply({
+        embeds: [
+          new MessageEmbed().setTitle('오류 발생').setDescription('팀이 꽉 차지 않았습니다.'),
+        ],
+      });
+
     const notLinkedMembers = members.filter((o) => !o.riotNickname);
 
     if (notLinkedMembers.length > 0) {

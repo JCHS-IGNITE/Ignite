@@ -40,18 +40,18 @@ module.exports = {
           embed.addField('라이엇', `닉네임: ${nickname}\n레벨: ${level}\n티어: ${rank.name}`);
         }
 
-        const team = (await Team.find({})).filter(
-          (t) =>
-            t.member1.equals(user._id) ||
-            t.member2.equals(user._id) ||
-            t.member3.equals(user._id) ||
-            t.member4.equals(user._id) ||
-            t.member5.equals(user._id) ||
-            t.spareMember.equals(user._id),
-        );
+        const team = await Team.findOne({
+          $or: [
+            { member1: user._id },
+            { member2: user._id },
+            { member3: user._id },
+            { member4: user._id },
+            { member5: user._id },
+            { spareMember: user._id },
+          ],
+        });
 
-        if (team.length > 0)
-          embed.addField('E-Sport 팀', `[${team[0].grade}-${team[0].class}] ${team[0].name}`);
+        if (team) embed.addField('E-Sport 팀', `[${team.grade}-${team.class}] ${team.name}`);
 
         await interaction.reply({
           embeds: [embed],
