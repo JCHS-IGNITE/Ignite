@@ -28,7 +28,6 @@ module.exports = async (client, interaction) => {
       console.error(e);
 
       await interaction.reply({
-        ephemeral: true,
         embeds: [
           new MessageEmbed()
             .setTitle('오류 발생')
