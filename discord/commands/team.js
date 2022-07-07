@@ -103,6 +103,8 @@ module.exports = {
 
               await Team.updateOne({ grade: user.grade, class: user.class }, updateQry);
 
+              await interaction.member.roles.add(process.env.DISCORD_ESPORT_PLAYER_ROLE);
+
               await interaction.reply({
                 embeds: [
                   new MessageEmbed()
