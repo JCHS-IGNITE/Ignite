@@ -1,7 +1,7 @@
-const prediction = require('./selectMenu/prediction');
+const predictionStart = require('./selectMenu/predictionStart');
 
 module.exports = async (client, interaction) => {
   if (interaction.isSelectMenu()) {
-    await prediction(client, interaction);
+    await predictionStart(client, interaction);
   }
 };

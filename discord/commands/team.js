@@ -34,36 +34,36 @@ module.exports = {
       });
 
       if (command === '확인') {
-        const members = await Promise.all(
-          [
-            team.member1,
-            team.member2,
-            team.member3,
-            team.member4,
-            team.member5,
-            team.spareMember,
-          ].map((id) => User.findById(id)),
+        const teamUser = await Promise.all(
+          Object.entries(team._doc)
+            .filter((obj) => obj[0].startsWith('member'))
+            .map((obj) => obj[1])
+            .map((obj) => obj._id)
+            .map((id) => User.findById(id)),
+        );
+        const teamRiot = await Promise.all(
+          teamUser.map(async (sUser) => ({
+            discordId: sUser.discordId,
+            riotInfo: await fetchRiot(sUser.riotNickname),
+          })),
+        );
+        const teamMember = teamRiot.map(
+          (sUser) =>
+            `<@${sUser.discordId}> | [${sUser.riotInfo.rank.name}] ${sUser.riotInfo.nickname}`,
         );
 
-        const teams = (
-          await Promise.all(
-            members
-              .filter((o) => o !== null)
-              .map(async (o) => ({
-                discordId: o.discordId,
-                riot: await fetchRiot(o.riotNickname),
-              })),
-          )
-        )
-          .map((o) => `<@${o.discordId}>  :  [${o.riot.rank.name}] ${o.riot.nickname}`)
-          .join('\n');
+        if (team.spareMember) {
+          const sUser = await User.findById(team.spareMember);
+          const riot = await fetchRiot(sUser.riotNickname);
+          teamMember.push(`<@${sUser.discordId}> | *<예비> [${riot.rank.name}] ${riot.nickname}*`);
+        }
 
         await interaction.reply({
           ephemeral: true,
           embeds: [
             new MessageEmbed()
-              .setTitle(`[${team.grade}-${team.class}] ${team.class}`)
-              .setDescription(`${teams}`)
+              .setTitle(`[${team.grade}-${team.class}] ${team.name}`)
+              .setDescription(teamMember.join('\n'))
               .setColor(0x66ccff),
           ],
         });

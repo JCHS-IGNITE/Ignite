@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageSelectMenu, MessageButton, MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageSelectMenu, MessageEmbed } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { PermissionFlagsBits } = require('discord-api-types/v10');
 const Team = require('../../schema/Team');
@@ -25,36 +25,87 @@ module.exports = {
       if (command === '시작') {
         const matches = await Match.find({});
 
-        await interaction.reply({
-          components: [
-            new MessageActionRow().addComponents(
-              new MessageSelectMenu()
-                .setCustomId(`prediction_match`)
-                .setOptions(
-                  await Promise.all(
-                    matches.map(async (match) => {
-                      const team1 = await Team.findById(match.team1);
-                      const team2 = await Team.findById(match.team2);
+        const options = (
+          await Promise.all(
+            matches
+              .filter((o) => !o.start)
+              .map(async (match) => {
+                const team1 = await Team.findById(match.team1);
+                const team2 = await Team.findById(match.team2);
 
-                      return {
-                        label: `[${match.round}] ${team1.grade}-${team1.class} vs ${team2.grade}-${team2.class}`,
-                        description: `[${match.round}R] ${team1.name} vs ${team2.name}`,
-                        value: `${match._id}`,
-                      };
-                    }),
-                  ),
-                )
-                .setPlaceholder('매치를 선택해주세요.'),
-            ),
-            new MessageActionRow().addComponents(
-              new MessageButton()
-                .setCustomId('prediction_exit')
-                .setLabel('취소')
-                .setStyle('DANGER'),
-            ),
-          ],
-        });
+                return {
+                  label: `[${match.round}R] ${team1.grade}-${team1.class} vs ${team2.grade}-${team2.class}`,
+                  description: `[${match.round}R] ${team1.name} vs ${team2.name}`,
+                  value: `${match._id}`,
+                };
+              }),
+          )
+        ).slice(0, 25);
+
+        if (options.length > 0)
+          await interaction.reply({
+            ephemeral: true,
+            components: [
+              new MessageActionRow().addComponents(
+                new MessageSelectMenu()
+                  .setCustomId(`prediction_start`)
+                  .setOptions(options)
+                  .setPlaceholder('승부 예측을 시작할 매치를 선택해주세요.'),
+              ),
+            ],
+          });
+        else
+          await interaction.reply({
+            ephemeral: true,
+            embeds: [
+              new MessageEmbed()
+                .setTitle('오류 발생')
+                .setDescription('등록된 매치가 없습니다.')
+                .setColor(0xff5252),
+            ],
+          });
       } else if (command === '종료') {
+        const matches = await Match.find({});
+
+        const options = (
+          await Promise.all(
+            matches
+              .filter((o) => o.start && !o.end)
+              .map(async (match) => {
+                const team1 = await Team.findById(match.team1);
+                const team2 = await Team.findById(match.team2);
+
+                return {
+                  label: `[${match.round}R] ${team1.grade}-${team1.class} vs ${team2.grade}-${team2.class}`,
+                  description: `[${match.round}R] ${team1.name} vs ${team2.name}`,
+                  value: `${match._id}`,
+                };
+              }),
+          )
+        ).slice(0, 25);
+
+        if (options.length > 0)
+          await interaction.reply({
+            ephemeral: true,
+            components: [
+              new MessageActionRow().addComponents(
+                new MessageSelectMenu()
+                  .setCustomId(`prediction_end`)
+                  .setOptions(options)
+                  .setPlaceholder('승부 예측을 종료할 매치를 선택해주세요.'),
+              ),
+            ],
+          });
+        else
+          await interaction.reply({
+            ephemeral: true,
+            embeds: [
+              new MessageEmbed()
+                .setTitle('오류 발생')
+                .setDescription('승부 예측을 시작한 경기가 없습니다.')
+                .setColor(0xff5252),
+            ],
+          });
       }
     }
   },
