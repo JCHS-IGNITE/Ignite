@@ -4,7 +4,6 @@ const { ApplicationCommandType } = require('discord-api-types/v10');
 const Team = require('../../schema/Team');
 const User = require('../../schema/User');
 const fetchRiot = require('../../util/fetchRiot');
-const { pointToRank } = require('../../util/rank');
 
 module.exports = {
   async execute(interaction) {
@@ -28,11 +27,7 @@ module.exports = {
             }`,
             true,
           )
-          .addField(
-            '포인트',
-            `등급: ${await pointToRank(user)}\n포인트: ${user.point.toLocaleString()}`,
-            true,
-          )
+          .addField('포인트', user.point.toLocaleString(), true)
           .setColor(0x66ccff);
 
         if (user.riotNickname) {
