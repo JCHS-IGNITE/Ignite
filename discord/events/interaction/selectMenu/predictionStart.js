@@ -61,8 +61,9 @@ module.exports = async (client, interaction) => {
         (user) => `<@${user.discordId}> | [${user.riotInfo.rank.name}] ${user.riotInfo.nickname}`,
       );
 
+      await Match.findByIdAndUpdate(matchId, { predictionStart: new Date() });
+
       await interaction.reply({
-        ephemeral: true,
         embeds: [
           new MessageEmbed()
             .setTitle('승부예측 등록')
@@ -79,6 +80,8 @@ module.exports = async (client, interaction) => {
           ),
         ],
       });
+
+      await interaction.message.delete();
     } else {
       const embed = new MessageEmbed()
         .setTitle('오류 발생')
@@ -108,7 +111,6 @@ module.exports = async (client, interaction) => {
         );
 
       await interaction.reply({
-        ephemeral: true,
         embeds: [embed],
       });
     }

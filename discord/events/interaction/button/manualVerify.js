@@ -41,9 +41,8 @@ module.exports = async (client, interaction) => {
       ).send({
         embeds: [
           new MessageEmbed()
-            .setTitle('재학생 인증 성공')
-            .setDescription(`${grade}학년 ${clazz}반 ${stdId}번 ${name} 으로 인증되었습니다.`)
-            .addField('인증 방법', '수동 인증', true)
+            .setTitle('재학생 인증 허가')
+            .setDescription(`${grade}학년 ${clazz}반 ${stdId}번 ${name}으로 승인되었습니다.`)
             .addField('담당자', interaction.user.tag, true)
             .setColor(0x7bff7b),
         ],
