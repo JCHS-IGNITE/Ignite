@@ -25,6 +25,7 @@ module.exports = async (client, interaction) => {
           ],
         });
       } catch (e) {
+        console.error(e);
         await interaction.reply({
           ephemeral: true,
           embeds: [

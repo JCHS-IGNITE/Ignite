@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { PermissionFlagsBits } = require('discord-api-types/v10');
 const Team = require('../../schema/Team');
 const User = require('../../schema/User');
-const genUuid = require('../../util/genUuid');
+const Match = require('../../schema/Match');
 
 module.exports = {
   async execute(interaction) {
@@ -23,56 +23,35 @@ module.exports = {
       });
     } else {
       if (command === '시작') {
-        const uuid = genUuid();
-        const teams = await Team.find({});
+        const matches = await Match.find({});
 
         await interaction.reply({
-          embeds: [
-            new MessageEmbed()
-              .setTitle('승부 예측 등록')
-              .addField('[팀1]', '팀을 선택해주세요. ')
-              .addField('[팀2]', '팀을 선택해주세요.')
-              .setColor(0x66ccff),
-          ],
           components: [
             new MessageActionRow().addComponents(
               new MessageSelectMenu()
-                .setCustomId(`prediction_team1`)
+                .setCustomId(`prediction_match`)
                 .setOptions(
-                  teams.map((team) => ({
-                    label: `${team.name}`,
-                    description: `${team.grade}-${team.class}`,
-                    value: `${team._id}`,
-                  })),
+                  await Promise.all(
+                    matches.map(async (match) => {
+                      const team1 = await Team.findById(match.team1);
+                      const team2 = await Team.findById(match.team2);
+
+                      return {
+                        label: `[${match.round}] ${team1.grade}-${team1.class} vs ${team2.grade}-${team2.class}`,
+                        description: `[${match.round}R] ${team1.name} vs ${team2.name}`,
+                        value: `${match._id}`,
+                      };
+                    }),
+                  ),
                 )
-                .setPlaceholder('1팀을 선택해주세요.'),
+                .setPlaceholder('매치를 선택해주세요.'),
             ),
             new MessageActionRow().addComponents(
-              new MessageSelectMenu()
-                .setCustomId(`prediction_team2`)
-                .setOptions(
-                  teams.map((team) => ({
-                    label: `${team.name}`,
-                    description: `${team.grade}-${team.class}`,
-                    value: `${team._id}`,
-                  })),
-                )
-                .setPlaceholder('2팀을 선택해주세요.'),
+              new MessageButton()
+                .setCustomId('prediction_exit')
+                .setLabel('취소')
+                .setStyle('DANGER'),
             ),
-            new MessageActionRow()
-              .addComponents(
-                new MessageButton()
-                  .setCustomId(`prediction_confirm-${uuid}`)
-                  .setLabel('등록')
-                  .setStyle('SUCCESS')
-                  .setDisabled(true),
-              )
-              .addComponents(
-                new MessageButton()
-                  .setCustomId('prediction_exit')
-                  .setLabel('취소')
-                  .setStyle('DANGER'),
-              ),
           ],
         });
       } else if (command === '종료') {

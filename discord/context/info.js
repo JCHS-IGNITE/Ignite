@@ -54,6 +54,7 @@ module.exports = {
         if (team) embed.addField('E-Sport 팀', `[${team.grade}-${team.class}] ${team.name}`);
 
         await interaction.reply({
+          ephemeral: true,
           embeds: [embed],
         });
       } else

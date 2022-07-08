@@ -14,6 +14,7 @@ module.exports = async (client, interaction) => {
       const user = await User.findOne({ discordId });
 
       await interaction.reply({
+        ephemeral: true,
         embeds: [
           new MessageEmbed()
             .setTitle('포인트 지급')
@@ -28,6 +29,7 @@ module.exports = async (client, interaction) => {
       console.error(e);
 
       await interaction.reply({
+        ephemeral: true,
         embeds: [
           new MessageEmbed()
             .setTitle('오류 발생')

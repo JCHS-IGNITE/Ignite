@@ -22,6 +22,7 @@ module.exports = async (client, interaction) => {
 
     if (members.filter((o) => o === null).length > 0)
       await interaction.reply({
+        ephemeral: true,
         embeds: [
           new MessageEmbed().setTitle('오류 발생').setDescription('팀이 꽉 차지 않았습니다.'),
         ],
@@ -31,6 +32,7 @@ module.exports = async (client, interaction) => {
 
       if (notLinkedMembers.length > 0) {
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
@@ -64,6 +66,7 @@ module.exports = async (client, interaction) => {
         await interaction.message.edit({ embeds: [embed], components });
 
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle(`팀 등록 성공`)

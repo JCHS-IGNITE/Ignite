@@ -37,6 +37,7 @@ module.exports = {
         const riot = await fetchRiot(riotNickname);
 
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('라이엇 연동 성공')

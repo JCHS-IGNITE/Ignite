@@ -59,6 +59,7 @@ module.exports = {
           .join('\n');
 
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle(`[${team.grade}-${team.class}] ${team.class}`)
@@ -106,6 +107,7 @@ module.exports = {
               await interaction.member.roles.add(process.env.DISCORD_ESPORT_PLAYER_ROLE);
 
               await interaction.reply({
+                ephemeral: true,
                 embeds: [
                   new MessageEmbed()
                     .setTitle('팀 가입')

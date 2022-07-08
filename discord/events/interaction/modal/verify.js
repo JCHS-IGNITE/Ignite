@@ -26,6 +26,7 @@ module.exports = async (client, interaction) => {
     if (loginResult.data.result === 'fail' || loginResult.data.result === false) {
       if (loginResult.data.msg.includes('아이디가 없거나 비밀번호가 맞지 않습니다')) {
         await interaction.reply({
+          ephemeral: true,
           embeds: [
             new MessageEmbed()
               .setTitle('오류 발생')
@@ -139,6 +140,7 @@ module.exports = async (client, interaction) => {
           } catch (e) {}
 
           await interaction.reply({
+            ephemeral: true,
             embeds: [
               new MessageEmbed()
                 .setTitle('재학생 인증 성공')
