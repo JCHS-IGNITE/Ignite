@@ -2,10 +2,12 @@ const mongoose = require('mongoose');
 
 const matchSchema = new mongoose.Schema(
   {
-    round: { type: Number, required: true },
     team1: { type: mongoose.Schema.Types.ObjectId, required: true },
     team2: { type: mongoose.Schema.Types.ObjectId, required: true },
-    win: { type: mongoose.Schema.Types.ObjectId, default: false },
+    round: { type: Number, required: true },
+    win: { type: mongoose.Schema.Types.ObjectId, default: null },
+    start: { type: Boolean, default: false },
+    end: { type: Boolean, default: false },
   },
   { versionKey: false },
 );
