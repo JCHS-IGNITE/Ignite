@@ -28,6 +28,7 @@ module.exports = async (client, interaction) => {
     }
 
     await interaction.reply({
+      ephemeral: true,
       embeds: [
         new MessageEmbed()
           .setTitle('공지 전송')
