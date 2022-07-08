@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const logger = require('../../provider/loggerProvider');
 
 module.exports = {
@@ -13,7 +13,6 @@ module.exports = {
     await client.user.setActivity({ name: '제천고등학교', type: 'COMPETING' });
 
     const verifyChannel = await client.channels.fetch(process.env.DISCORD_VERIFY_CHANNEL);
-
     if (
       (await verifyChannel.messages.fetch({ limit: 100 }))
         .filter((message) => message.author.id === process.env.DISCORD_BOT_CLIENT_ID)
@@ -36,6 +35,34 @@ module.exports = {
               '학생증 사진을 업로드 하여 관리자가 확인 후 인증합니다.\n`/인증 수동` 명령어를 사용해주세요.',
             )
             .setColor(0xffcc99),
+        ],
+      });
+
+    const roleChannel = await client.channels.fetch(process.env.DISCORD_GIVE_ROLE_CHANNEL);
+    if (
+      (await roleChannel.messages.fetch({ limit: 100 }))
+        .filter((message) => message.author.id === process.env.DISCORD_BOT_CLIENT_ID)
+        .filter((message) => message.embeds.length === 1)
+        .filter((message) => message.embeds[0].title === '승부예측 역할 받기').size === 0
+    )
+      await roleChannel.send({
+        embeds: [
+          new MessageEmbed()
+            .setTitle('승부예측 역할 받기')
+            .setDescription('승부예측에 참가하고 싶으시다면 역할을 받아주세요.')
+            .setColor(0xffcc99),
+        ],
+        components: [
+          new MessageActionRow().addComponents(
+            new MessageButton()
+              .setCustomId(`add_prediction_role`)
+              .setLabel(`역할 추가`)
+              .setStyle('PRIMARY'),
+            new MessageButton()
+              .setCustomId(`remove_prediction_role`)
+              .setLabel(`역할 제거`)
+              .setStyle('DANGER'),
+          ),
         ],
       });
   },
