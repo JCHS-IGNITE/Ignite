@@ -74,7 +74,7 @@ module.exports = {
             embeds: [
               new MessageEmbed()
                 .setTitle('오류 발생')
-                .setDescription(`승부예측을 만들기 전 라이엇 계정과 연동해주세요.`)
+                .setDescription(`팀에 참가하려면 라이엇 계정과 연동해주세요.`)
                 .setColor(0xff5252),
             ],
           });
