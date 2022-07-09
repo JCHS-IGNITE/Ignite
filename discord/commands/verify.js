@@ -181,6 +181,59 @@ module.exports = {
 
           logger.info('유저(%s)가 인증을 요청함.', interaction.user.tag);
         }
+      } else if (command === '선생님') {
+        const name = interaction.options.getString('이름');
+        const grade = interaction.options.getInteger('학년');
+        const clazz = interaction.options.getInteger('반');
+
+        await new User({
+          name,
+          grade,
+          class: clazz,
+          discordId: interaction.user.id,
+          verify: false,
+        }).save();
+
+        await interaction.reply({
+          ephemeral: true,
+          embeds: [
+            new MessageEmbed()
+              .setTitle('인증 대기중')
+              .setDescription(`관리자가 확인 후 인증 여부가 결정됩니다.\n잠시만 기다려주세요.`)
+              .setColor(0xffcc99),
+          ],
+        });
+
+        await (
+          await interaction.client.channels.fetch(process.env.DISCORD_ADMIN_VERIFY_CHANNEL)
+        ).send({
+          embeds: [
+            new MessageEmbed()
+              .setTitle('관리자 인증 [선생님]')
+              .setDescription(`<@${interaction.user.id}>`)
+              .setColor(0xffff99)
+              .addField('이름', name)
+              .addField('디스코드 이름', interaction.user.tag, true)
+              .addField('디스코드 아이디', interaction.user.id, true),
+          ],
+          components: [
+            new MessageActionRow()
+              .addComponents(
+                new MessageButton()
+                  .setCustomId('manual_teacher_approve')
+                  .setLabel('승인')
+                  .setStyle('SUCCESS'),
+              )
+              .addComponents(
+                new MessageButton()
+                  .setCustomId('manual_teacher_reject')
+                  .setLabel('거부')
+                  .setStyle('DANGER'),
+              ),
+          ],
+        });
+
+        logger.info('유저(%s)가 인증을 요청함.', interaction.user.tag);
       }
     }
   },
@@ -258,6 +311,14 @@ module.exports = {
         )
         .addAttachmentOption((option) =>
           option.setName('학생증').setDescription('학생증').setRequired(true),
+        ),
+    )
+    .addSubcommand((command) =>
+      command
+        .setName('선생님')
+        .setDescription('선생님을 위한 인증입니다.')
+        .addStringOption((option) =>
+          option.setName('이름').setDescription('본명').setRequired(true),
         ),
     ),
 };
