@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node app.js",
     "lint": "eslint './**/*.js'",
-    "lint:fix": "eslint --fix './**/*.js'"
+    "lint:fix": "eslint --fix './**/*.js'",
+    "teamview": "node ./static/teamViewer.js"
   },
   "dependencies": {
     "@discordjs/builders": "^0.15.0",
