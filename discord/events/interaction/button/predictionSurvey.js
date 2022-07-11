@@ -16,6 +16,10 @@ module.exports = async (client, interaction) => {
 
       const user = await User.findOne({ discordId: interaction.user.id });
 
+      await Match.findByIdAndUpdate(matchId, {
+        $pull: { predictionTeam1: user._id, predictionTeam2: user._id },
+      });
+
       if (team === 1)
         await Match.findByIdAndUpdate(matchId, { $push: { predictionTeam1: user._id } });
       else await Match.findByIdAndUpdate(matchId, { $push: { predictionTeam2: user._id } });

@@ -1,7 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const User = require('../../schema/User');
-const fetchRiot = require('../../util/fetchRiot');
 const Team = require('../../schema/Team');
 
 module.exports = {
@@ -41,21 +40,15 @@ module.exports = {
             .map((obj) => obj._id)
             .map((id) => User.findById(id)),
         );
-        const teamRiot = await Promise.all(
-          teamUser.map(async (sUser) => ({
-            discordId: sUser.discordId,
-            riotInfo: await fetchRiot(sUser.riotNickname),
-          })),
-        );
-        const teamMember = teamRiot.map(
-          (sUser) =>
-            `<@${sUser.discordId}> | [${sUser.riotInfo.rank.name}] ${sUser.riotInfo.nickname}`,
+        const teamMember = teamUser.map(
+          (sUser) => `[${sUser.grade}-${sUser.class}] ${sUser.name} | ${sUser.riotNickname}`,
         );
 
         if (team.spareMember) {
           const sUser = await User.findById(team.spareMember);
-          const riot = await fetchRiot(sUser.riotNickname);
-          teamMember.push(`<@${sUser.discordId}> | *<예비> [${riot.rank.name}] ${riot.nickname}*`);
+          teamMember.push(
+            `[${sUser.grade}-${sUser.class}] ${sUser.name} | *<예비> ${sUser.riotNickname}*`,
+          );
         }
 
         await interaction.reply({
@@ -127,17 +120,8 @@ module.exports = {
                 ].map((id) => User.findById(id)),
               );
 
-              const teams = (
-                await Promise.all(
-                  members
-                    .filter((o) => o !== null)
-                    .map(async (o) => ({
-                      discordId: o.discordId,
-                      riot: await fetchRiot(o.riotNickname),
-                    })),
-                )
-              )
-                .map((o) => `<@${o.discordId}>  :  [${o.riot.rank.name}] ${o.riot.nickname}`)
+              const teams = (await Promise.all(members.filter((o) => o !== null)))
+                .map((o) => `[${o.grade}-${o.class}] ${o.name} | ${o.riotNickname}`)
                 .join('\n');
 
               await interaction.reply({

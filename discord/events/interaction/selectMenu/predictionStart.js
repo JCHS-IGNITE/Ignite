@@ -2,7 +2,6 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const User = require('../../../../schema/User');
 const Team = require('../../../../schema/Team');
 const Match = require('../../../../schema/Match');
-const fetchRiot = require('../../../../util/fetchRiot');
 
 module.exports = async (client, interaction) => {
   if (interaction.customId === 'prediction_start') {
@@ -34,14 +33,8 @@ module.exports = async (client, interaction) => {
           .map((obj) => obj._id)
           .map((id) => User.findById(id)),
       );
-      const team1Riot = await Promise.all(
-        team1Users.map(async (user) => ({
-          discordId: user.discordId,
-          riotInfo: await fetchRiot(user.riotNickname),
-        })),
-      );
-      const team1Members = team1Riot.map(
-        (user) => `<@${user.discordId}> | [${user.riotInfo.rank.name}] ${user.riotInfo.nickname}`,
+      const team1Members = team1Users.map(
+        (user) => `[${user.grade}-${user.class}] ${user.name} | ${user.riotNickname}`,
       );
 
       const team2Users = await Promise.all(
@@ -51,14 +44,8 @@ module.exports = async (client, interaction) => {
           .map((obj) => obj._id)
           .map((id) => User.findById(id)),
       );
-      const team2Riot = await Promise.all(
-        team2Users.map(async (user) => ({
-          discordId: user.discordId,
-          riotInfo: await fetchRiot(user.riotNickname),
-        })),
-      );
-      const team2Members = team2Riot.map(
-        (user) => `<@${user.discordId}> | [${user.riotInfo.rank.name}] ${user.riotInfo.nickname}`,
+      const team2Members = team2Users.map(
+        (user) => `[${user.grade}-${user.class}] ${user.name} | ${user.riotNickname}`,
       );
 
       await Match.findByIdAndUpdate(matchId, { predictionStart: new Date() });
