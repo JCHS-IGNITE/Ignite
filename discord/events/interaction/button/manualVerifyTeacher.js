@@ -15,9 +15,11 @@ module.exports = async (client, interaction) => {
       const member = await interaction.guild.members.fetch(discordId);
 
       await member.roles.add(process.env.DISCORD_VERIFY_ROLE);
+      await member.roles.add(process.env.DISCORD_TEACHER_ROLE);
 
       try {
         await member.setNickname(`${name} 선생님`);
+
         // eslint-disable-next-line no-empty
       } catch (e) {}
 
