@@ -67,7 +67,6 @@ module.exports = async (client, interaction) => {
     });
 
     await interaction.reply({
-      ephemeral: true,
       embeds: [
         new MessageEmbed()
           .setTitle('승부예측 시작')

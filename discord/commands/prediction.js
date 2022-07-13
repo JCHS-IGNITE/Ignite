@@ -44,6 +44,7 @@ module.exports = {
 
         if (options.length > 0)
           await interaction.reply({
+            ephemeral: true,
             components: [
               new MessageActionRow().addComponents(
                 new MessageSelectMenu()
@@ -85,6 +86,7 @@ module.exports = {
 
         if (options.length > 0)
           await interaction.reply({
+            ephemeral: true,
             components: [
               new MessageActionRow().addComponents(
                 new MessageSelectMenu()
@@ -126,6 +128,7 @@ module.exports = {
 
         if (options.length > 0)
           await interaction.reply({
+            ephemeral: true,
             components: [
               new MessageActionRow().addComponents(
                 new MessageSelectMenu()

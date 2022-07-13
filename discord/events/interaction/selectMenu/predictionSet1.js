@@ -25,6 +25,7 @@ module.exports = async (client, interaction) => {
     ];
 
     await interaction.reply({
+      ephemeral: true,
       components: [
         new MessageActionRow().addComponents(
           new MessageSelectMenu()

@@ -21,7 +21,8 @@ module.exports = async (client, interaction) => {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const id of winners) {
-      const user = await User.findByIdAndUpdate(id, { $inc: { point: 1 } });
+      await User.findByIdAndUpdate(id, { $inc: { point: 1 } });
+      const user = await User.findById(id);
 
       (await interaction.guild.members.fetch(user.discordId)).send({
         embeds: [
@@ -39,7 +40,6 @@ module.exports = async (client, interaction) => {
     }
 
     await interaction.reply({
-      ephemeral: true,
       embeds: [
         new MessageEmbed()
           .setTitle('승부예측 결과 등록')
