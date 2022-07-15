@@ -34,8 +34,8 @@ module.exports = {
                 const team2 = await Team.findById(match.team2);
 
                 return {
-                  label: `[${match.round}R] ${team1.grade}-${team1.class} vs ${team2.grade}-${team2.class}`,
-                  description: `[${match.round}R] ${team1.name} vs ${team2.name}`,
+                  label: `[${match.round}] ${team1.grade}-${team1.class} vs ${team2.grade}-${team2.class}`,
+                  description: `[${match.round}] ${team1.name} vs ${team2.name}`,
                   value: `${match._id}`,
                 };
               }),
@@ -76,8 +76,8 @@ module.exports = {
                 const team2 = await Team.findById(match.team2);
 
                 return {
-                  label: `[${match.round}R] ${team1.grade}-${team1.class} vs ${team2.grade}-${team2.class}`,
-                  description: `[${match.round}R] ${team1.name} vs ${team2.name}`,
+                  label: `[${match.round}] ${team1.grade}-${team1.class} vs ${team2.grade}-${team2.class}`,
+                  description: `[${match.round}] ${team1.name} vs ${team2.name}`,
                   value: `${match._id}`,
                 };
               }),
@@ -118,8 +118,8 @@ module.exports = {
                 const team2 = await Team.findById(match.team2);
 
                 return {
-                  label: `[${match.round}R] ${team1.grade}-${team1.class} vs ${team2.grade}-${team2.class}`,
-                  description: `[${match.round}R] ${team1.name} vs ${team2.name}`,
+                  label: `[${match.round}] ${team1.grade}-${team1.class} vs ${team2.grade}-${team2.class}`,
+                  description: `[${match.round}] ${team1.name} vs ${team2.name}`,
                   value: `${match._id}`,
                 };
               }),

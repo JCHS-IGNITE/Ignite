@@ -4,7 +4,7 @@ const matchSchema = new mongoose.Schema(
   {
     team1: { type: mongoose.Schema.Types.ObjectId, required: true },
     team2: { type: mongoose.Schema.Types.ObjectId, required: true },
-    round: { type: Number, required: true },
+    round: { type: String, required: true },
     win: { type: mongoose.Schema.Types.ObjectId, default: null },
     predictionTeam1: { type: Array, default: [] },
     predictionTeam2: { type: Array, default: [] },
